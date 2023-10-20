@@ -1,0 +1,7 @@
+{
+  "ecs_cluster_name": "mlflow",
+  "ecs_service_name": "mlflow",
+  "container_repository_name": "mlflow",
+  "container_image_tag": "latest",
+  "vpc_name": "default"
+}
