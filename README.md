@@ -77,6 +77,13 @@ For security purposes, you may want to provision an internal load balancer in yo
 direct connectivity from the outside world. Here is a blog post explaining how to achieve
 this: [Access Private applications on AWS Fargate using Amazon API Gateway PrivateLink](https://aws.amazon.com/blogs/compute/access-private-applications-on-aws-fargate-using-amazon-api-gateway-privatelink/)
 
+:warning: If you failed to launch ECS Taske with an error message like:
+```
+WARNING: The requested image's platform (linux/arm64/v8) does not match the detected host platform (linux/amd64) and no specific platform was requested
+exec /bin/sh: exec format error
+```
+you need to the MLflow container image on Amazon EC2 or Cloud9.
+
 ### Managing an ML lifecycle with Amazon SageMaker and MLflow
 
 You now have a remote MLflow tracking server running accessible through
