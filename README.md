@@ -31,6 +31,18 @@ To go through this example, make sure you have the following:
 * [Docker](https://www.docker.com) to build and push the MLflow container image to ECR
 * This [Github repository](https://github.com/aws-samples/amazon-sagemaker-mlflow-fargate) cloned into your environment to follow the steps
 
+Execute the following commands to build and push the MLflow container image to ECR:
+
+```
+git clone https://github.com/aws-samples/amazon-sagemaker-mlflow-fargate
+cd container
+docker build -t mlflow .
+docker tag mlflow:latest {account-id}.dkr.ecr.{region}.amazonaws.com/mlflow:latest
+aws ecr create-repository --repository-name mlflow
+aws ecr get-login-password --region {region} | docker login --username AWS --password-stdin {account-id}.dkr.ecr.us-east-1.amazonaws.com
+docker push {account-id}.dkr.ecr.{region}.amazonaws.com/mlflow:latest
+```
+
 ### Deploying the stack
 
 You can view the CDK stack details in [app.py](https://github.com/aws-samples/amazon-sagemaker-mlflow-fargate/blob/main/app.py).
@@ -49,11 +61,11 @@ Once this is installed, you can execute the following commands to deploy the inf
 ACCOUNT_ID=$(aws sts get-caller-identity --query Account | tr -d '"')
 AWS_REGION=$(aws configure get region)
 cdk bootstrap aws://${ACCOUNT_ID}/${AWS_REGION}
-cdk deploy --parameters ProjectName=mlflow --require-approval never
+cdk deploy --parameters ProjectName=mlflow --require-approval never --all
 ```
 
 The first 2 commands will get your account ID and current AWS region using the AWS CLI on your computer. ```cdk
-bootstrap``` and ```cdk deploy``` will build the container image locally, push it to ECR, and deploy the stack. 
+bootstrap``` and ```cdk deploy``` will build the container image locally, push it to ECR, and deploy the stack.
 
 The stack will take a few minutes to launch the MLflow server on AWS Fargate, with an S3 bucket and a MySQL database on
 RDS. You can then use the load balancer URI present in the stack outputs to access the MLflow UI:
@@ -69,7 +81,7 @@ this: [Access Private applications on AWS Fargate using Amazon API Gateway Priva
 
 You now have a remote MLflow tracking server running accessible through
 a [REST API](https://mlflow.org/docs/latest/rest-api.html#rest-api) via
-the [load balancer uri](https://mlflow.org/docs/latest/quickstart.html#quickstart-logging-to-remote-server). 
+the [load balancer uri](https://mlflow.org/docs/latest/quickstart.html#quickstart-logging-to-remote-server).
 You can use the MLflow Tracking API to log parameters, metrics, and models when running your machine learning project with Amazon
 SageMaker. For this you will need install the MLflow library when running your code on Amazon SageMaker and set the
 remote tracking uri to be your load balancer address.
