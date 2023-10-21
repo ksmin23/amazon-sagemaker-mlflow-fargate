@@ -8,6 +8,7 @@ from aws_cdk import (
   RemovalPolicy,
 
   aws_ec2 as ec2,
+  aws_logs as logs,
   aws_rds as rds,
   aws_secretsmanager as sm,
 )
@@ -75,6 +76,13 @@ class RDSStack(Stack):
       vpc_subnets=ec2.SubnetSelection(
         subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS
       ),
+      auto_minor_version_upgrade=False,
+      backup_retention=cdk.Duration.days(3),
+      cloudwatch_logs_retention=logs.RetentionDays.THREE_DAYS,
+      enable_performance_insights=True,
+      #XXX: The backup window and maintenance window must not overlap.
+      preferred_backup_window='02:00-03:00', # hh24:mi-hh24:mi
+      preferred_maintenance_window='Sun:03:00-Sun:04:00', #ddd:hh24:mi-ddd:hh24:mi
       removal_policy=RemovalPolicy.DESTROY,
       deletion_protection=False,
     )
