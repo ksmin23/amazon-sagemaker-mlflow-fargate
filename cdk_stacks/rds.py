@@ -90,7 +90,7 @@ class RDSStack(Stack):
     self.db_name = db_name
     self.db_username = username
     self.db_password_secret = db_password_secret
-    self.rds_security_group = sg_rds
+
 
     CfnOutput(self, "DatabaseName", value=self.db_name,
       export_name=f"{self.stack_name}-DatabaseName")

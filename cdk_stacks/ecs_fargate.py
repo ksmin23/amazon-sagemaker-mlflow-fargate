@@ -22,8 +22,8 @@ from constructs import Construct
 class ECSFargateStack(Stack):
 
   def __init__(self, scope: Construct, construct_id: str,
-    vpc, artifact_bucket, database, db_name,
-    username, db_password_secret, rds_security_group,
+    vpc, artifact_bucket, database,
+    db_name, username, db_password_secret,
     **kwargs) -> None:
 
     super().__init__(scope, construct_id, **kwargs)
