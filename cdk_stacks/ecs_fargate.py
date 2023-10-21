@@ -117,9 +117,6 @@ class ECSFargateStack(Stack):
       scale_out_cooldown=Duration.seconds(60),
     )
 
-    # ==================================================
-    # =================== OUTPUTS ======================
-    # ==================================================
     CfnOutput(
       scope=self,
       id="LoadBalancerDNS",

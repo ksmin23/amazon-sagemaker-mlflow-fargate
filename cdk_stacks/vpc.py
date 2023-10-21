@@ -13,6 +13,10 @@ class VpcStack(Stack):
   def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
     super().__init__(scope, construct_id, **kwargs)
 
+    # ==================================================
+    # ==================== VPC =========================
+    # ==================================================
+
     #XXX: For createing Amazon MWAA in the existing VPC,
     # remove comments from the below codes and
     # comments out vpc = aws_ec2.Vpc(..) codes,
