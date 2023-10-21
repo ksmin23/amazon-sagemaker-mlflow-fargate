@@ -22,7 +22,7 @@ class S3Stack(Stack):
     # ======= CFN PARAMETERS =======
     # ==============================
     project_name_param = CfnParameter(scope=self, id="ProjectName", type="String", default="mlflow")
-    bucket_name = f"{project_name_param.value_as_string}-artifacts-{Aws.ACCOUNT_ID}"
+    bucket_name = f"{project_name_param.value_as_string}-artifacts-{Aws.REGION}-{Aws.ACCOUNT_ID}"
 
     # ==================================================
     # ================= S3 BUCKET ======================

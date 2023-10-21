@@ -41,6 +41,7 @@ ecs_fargate_stack = ECSFargateStack(app, "MLflowECSFargateStack",
   rds_stack.db_name,
   rds_stack.db_username,
   rds_stack.db_password_secret,
+  rds_stack.rds_security_group,
   env=AWS_ENV
 )
 ecs_fargate_stack.add_dependency(rds_stack)

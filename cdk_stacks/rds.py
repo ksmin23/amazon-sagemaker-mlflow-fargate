@@ -33,7 +33,7 @@ class RDSStack(Stack):
       secret_name="dbPassword",
       generate_secret_string=sm.SecretStringGenerator(
         password_length=20, exclude_punctuation=True
-      ),
+      )
     )
 
     # # ==================================================
@@ -43,13 +43,13 @@ class RDSStack(Stack):
     sg_rds = ec2.SecurityGroup(
       scope=self, id="SGRDS", vpc=vpc, security_group_name="sg_rds"
     )
+
     # Adds an ingress rule which allows resources in the VPC's CIDR to access the database.
     sg_rds.add_ingress_rule(
       peer=ec2.Peer.ipv4(vpc.vpc_cidr_block),
       connection=ec2.Port.tcp(port),
       description="Allow inbound from VPC for mlflow"
     )
-
     sg_rds.add_ingress_rule(
       peer=sg_rds,
       connection=ec2.Port.all_tcp(),
@@ -75,7 +75,6 @@ class RDSStack(Stack):
       vpc_subnets=ec2.SubnetSelection(
         subnet_type=ec2.SubnetType.PRIVATE_WITH_EGRESS
       ),
-      # multi_az=True,
       removal_policy=RemovalPolicy.DESTROY,
       deletion_protection=False,
     )
@@ -83,6 +82,7 @@ class RDSStack(Stack):
     self.db_name = db_name
     self.db_username = username
     self.db_password_secret = db_password_secret
+    self.rds_security_group = sg_rds
 
     CfnOutput(self, "DatabaseName", value=self.db_name,
       export_name=f"{self.stack_name}-DatabaseName")

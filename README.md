@@ -33,15 +33,15 @@ To go through this example, make sure you have the following:
 
 Execute the following commands to build and push the MLflow container image to ECR:
 
-```
-git clone https://github.com/aws-samples/amazon-sagemaker-mlflow-fargate
-cd container
+<pre>
+git clone https://github.com/aws-samples/amazon-sagemaker-mlflow-fargate.git
+cd amazon-sagemaker-mlflow-fargate/container
 docker build -t mlflow .
-docker tag mlflow:latest {account-id}.dkr.ecr.{region}.amazonaws.com/mlflow:latest
+docker tag mlflow:latest {<i>account-id</i>}.dkr.ecr.{<i>region</i>}.amazonaws.com/mlflow:latest
 aws ecr create-repository --repository-name mlflow
-aws ecr get-login-password --region {region} | docker login --username AWS --password-stdin {account-id}.dkr.ecr.us-east-1.amazonaws.com
-docker push {account-id}.dkr.ecr.{region}.amazonaws.com/mlflow:latest
-```
+aws ecr get-login-password --region {<i>region</i>} | docker login --username AWS --password-stdin {<i>account-id</i>}.dkr.ecr.{<i>region</i>}.amazonaws.com
+docker push {<i>account-id</i>}.dkr.ecr.{<i>region</i>}.amazonaws.com/mlflow:latest
+</pre>
 
 ### Deploying the stack
 

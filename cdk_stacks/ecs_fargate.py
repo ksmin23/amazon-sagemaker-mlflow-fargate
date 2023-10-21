@@ -22,8 +22,8 @@ from constructs import Construct
 class ECSFargateStack(Stack):
 
   def __init__(self, scope: Construct, construct_id: str,
-    vpc, artifact_bucket,
-    database, db_name, username, db_password_secret,
+    vpc, artifact_bucket, database, db_name,
+    username, db_password_secret, rds_security_group,
     **kwargs) -> None:
 
     super().__init__(scope, construct_id, **kwargs)
@@ -59,7 +59,7 @@ class ECSFargateStack(Stack):
       memory_limit_mib=8 * 1024,
     )
 
-    container_repo_name = self.node.try_get_context('container_repository_name')
+    container_repo_name = self.node.try_get_context('container_repository_name') or "mlflow"
     container_repo_arn = ecr.Repository.arn_for_local_repository(container_repo_name,
       self, cdk.Aws.ACCOUNT_ID)
 
@@ -72,8 +72,7 @@ class ECSFargateStack(Stack):
       repository_arn=container_repo_arn,
       repository_name=container_repo_name)
 
-    container_image_tag = self.node.try_get_context('container_image_tag')
-    container_image_tag = 'latest' if not container_image_tag else container_image_tag
+    container_image_tag = self.node.try_get_context('container_image_tag') or "latest"
 
     container = task_definition.add_container(
       id="Container",
@@ -83,10 +82,9 @@ class ECSFargateStack(Stack):
         "HOST": database.db_instance_endpoint_address,
         "PORT": database.db_instance_endpoint_port,
         "DATABASE": db_name,
-        "USERNAME": username,
-        "PASSWORD": 'JYfIzfWP1CV%2B3rLc8E%5B0aqXw-~V%7C',
+        "USERNAME": username
       },
-      secrets={"PASSWORD2": ecs.Secret.from_secrets_manager(db_password_secret)},
+      secrets={"PASSWORD": ecs.Secret.from_secrets_manager(db_password_secret)},
       logging=ecs.LogDriver.aws_logs(stream_prefix="mlflow"),
     )
     port_mapping = ecs.PortMapping(
