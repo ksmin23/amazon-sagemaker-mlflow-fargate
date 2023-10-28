@@ -12,6 +12,7 @@ from aws_cdk import (
   aws_ec2 as ec2,
   aws_ecs as ecs,
   aws_ecr as ecr,
+  aws_ecr_assets as ecr_assets,
   aws_iam as iam,
   aws_ecs_patterns as ecs_patterns,
 )
@@ -77,6 +78,8 @@ class ECSFargateStack(Stack):
     container = task_definition.add_container(
       id="Container",
       image=ecs.ContainerImage.from_ecr_repository(container_repository, tag=container_image_tag),
+      #XXX: use the following code if you want to build Docker image when deploying CDK stacks
+      # image=ecs.ContainerImage.from_asset(directory="container", platform=ecr_assets.Platform.LINUX_AMD64),
       environment={
         "BUCKET": f"s3://{artifact_bucket.bucket_name}",
         "HOST": database.db_instance_endpoint_address,
