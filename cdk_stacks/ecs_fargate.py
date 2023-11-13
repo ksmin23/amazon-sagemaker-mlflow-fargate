@@ -57,11 +57,7 @@ class ECSFargateStack(Stack):
       id="MLflow",
       task_role=role,
       cpu=4 * 1024,
-      memory_limit_mib=8 * 1024,
-      runtime_platform=ecs.RuntimePlatform(
-        operating_system_family=ecs.OperatingSystemFamily.LINUX,
-        cpu_architecture=ecs.CpuArchitecture.ARM64
-      )
+      memory_limit_mib=8 * 1024
     )
 
     container_repo_name = self.node.try_get_context('container_repository_name') or "mlflow"
