@@ -60,26 +60,9 @@ class ECSFargateStack(Stack):
       memory_limit_mib=8 * 1024
     )
 
-    container_repo_name = self.node.try_get_context('container_repository_name') or "mlflow"
-    container_repo_arn = ecr.Repository.arn_for_local_repository(container_repo_name,
-      self, cdk.Aws.ACCOUNT_ID)
-
-    # container_repository = aws_ecr.Repository.from_repository_arn(self, "ContainerRepository",
-    #   repository_arn=repository_arn)
-    #
-    # jsii.errors.JSIIError: "repositoryArn" is a late-bound value,
-    # and therefore "repositoryName" is required. Use `fromRepositoryAttributes` instead
-    container_repository = ecr.Repository.from_repository_attributes(self, "ContainerRepository",
-      repository_arn=container_repo_arn,
-      repository_name=container_repo_name)
-
-    container_image_tag = self.node.try_get_context('container_image_tag') or "latest"
-
     container = task_definition.add_container(
       id="Container",
-      image=ecs.ContainerImage.from_ecr_repository(container_repository, tag=container_image_tag),
-      #XXX: use the following code if you want to build Docker image when deploying CDK stacks
-      # image=ecs.ContainerImage.from_asset(directory="container", platform=ecr_assets.Platform.LINUX_AMD64),
+      image=ecs.ContainerImage.from_asset(directory="container"),
       environment={
         "BUCKET": f"s3://{artifact_bucket.bucket_name}",
         "HOST": database.db_instance_endpoint_address,

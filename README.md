@@ -33,16 +33,6 @@ To go through this example, make sure you have the following:
 
 Execute the following commands to build and push the MLflow container image to ECR:
 
-<pre>
-git clone https://github.com/aws-samples/amazon-sagemaker-mlflow-fargate.git
-cd amazon-sagemaker-mlflow-fargate/container
-docker build -t mlflow .
-docker tag mlflow:latest {<i>account-id</i>}.dkr.ecr.{<i>region</i>}.amazonaws.com/mlflow:latest
-aws ecr create-repository --repository-name mlflow
-aws ecr get-login-password --region {<i>region</i>} | docker login --username AWS --password-stdin {<i>account-id</i>}.dkr.ecr.{<i>region</i>}.amazonaws.com
-docker push {<i>account-id</i>}.dkr.ecr.{<i>region</i>}.amazonaws.com/mlflow:latest
-</pre>
-
 ### Deploying the stack
 
 You can view the CDK stack details in [app.py](https://github.com/aws-samples/amazon-sagemaker-mlflow-fargate/blob/main/app.py).
